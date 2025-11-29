@@ -70,7 +70,13 @@
                         </td>
                         <td class="px-4 py-2 text-slate-600">
                             {% if incident.is_anonymous %}
-                                <span class="italic text-slate-400">Anonymous</span>
+                                <span class="italic text-slate-400">
+                                    Anonymous
+                                </span>
+                                <!-- INSECURE: leaking real reporter identity even for anonymous reports -->
+                                <span class="ml-1 text-xs text-red-600">
+                                    (reported by {{ incident.reporter.username }})
+                                </span>
                             {% else %}
                                 {{ incident.reporter.username }}
                             {% endif %}

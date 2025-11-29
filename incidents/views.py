@@ -81,30 +81,22 @@ def incident_detail(request, pk):
             comment.incident = incident
             comment.author = request.user
 
-            # Only staff can mark comments as internal
-            if not request.user.is_staff:
-                comment.is_internal = False
-
+            # INSECURE: allow anyone to mark internal
+            # (in secure branch we forced non-staff to is_internal=False)
             comment.save()
 
             logger.info(
-                "Comment added to incident",
-                extra={
-                    "user": request.user.username,
-                    "incident_id": incident.id,
-                    "is_internal": comment.is_internal,
-                },
+                f"Comment added to incident (insecure) | user={request.user.username} "
+                f"| incident_id={incident.id} | is_internal={comment.is_internal} "
+                f"| body={comment.body}"
             )
 
             return redirect("incidents:detail", pk=incident.pk)
     else:
         form = CommentForm()
 
-    # Staff see internal + external, normal users see only non-internal
-    if request.user.is_staff:
-        comments = incident.comments.all()
-    else:
-        comments = incident.comments.filter(is_internal=False)
+    # INSECURE: expose all comments, including internal, to all logged-in users
+    comments = incident.comments.all()
 
     context = {
         "incident": incident,
