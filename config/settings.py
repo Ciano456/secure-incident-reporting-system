@@ -131,3 +131,41 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'incidents:list'
 LOGOUT_REDIRECT_URL = 'login'
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{asctime}] {levelname} {name} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "file_app": {
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "logs", "app.log"),
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "incidents": {   # our app
+            "handlers": ["console", "file_app"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.security": {  # security-related logs
+            "handlers": ["console", "file_app"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+    },
+}
