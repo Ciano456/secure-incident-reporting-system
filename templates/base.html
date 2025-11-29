@@ -9,14 +9,22 @@
 <body class="bg-gray-100 min-h-screen">
     <nav class="bg-slate-900 text-white px-6 py-4 mb-8">
         <div class="max-w-6xl mx-auto flex items-center justify-between">
-            <div class="font-semibold">Secure Incident Reporting System</div>
-            <div class="space-x-4">
+            <div class="font-semibold tracking-tight">Secure Incident Reporting</div>
+            <div class="space-x-4 text-sm">
                 <a href="{% url 'incidents:list' %}" class="hover:underline">Incidents</a>
                 {% if user.is_authenticated %}
-                    <span class="text-sm">Hi, {{ user.username }}</span>
-                    <a href="{% url 'logout' %}" class="hover:underline text-sm">Logout</a>
+                    <span class="text-slate-200">Hi, {{ user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}" class="inline">
+                        {% csrf_token %}
+                        <button
+                            type="submit"
+                            class="hover:underline text-sm bg-transparent border-none text-white cursor-pointer"
+                        >
+                            Logout
+                        </button>
+                    </form>
                 {% else %}
-                    <a href="{% url 'login' %}" class="hover:underline text-sm">Login</a>
+                    <a href="{% url 'login' %}" class="hover:underline">Login</a>
                 {% endif %}
             </div>
         </div>

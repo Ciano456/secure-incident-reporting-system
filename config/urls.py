@@ -20,6 +20,13 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # Django built-in auth views (login, logout, etc.)
+    path('', include('django.contrib.auth.urls')),
+
+    # App routes:
     path('incidents/', include('incidents.urls')),
-    path('', RedirectView.as_view(pattern_name='incidents:list', permanent=False)),
+
+    # Default entry point: login page
+    path('', RedirectView.as_view(pattern_name='login', permanent=False)),
 ]
