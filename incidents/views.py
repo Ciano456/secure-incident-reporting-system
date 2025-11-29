@@ -6,18 +6,37 @@ from .forms import IncidentForm, CommentForm
 
 import logging
 
+from django.db import connection  
+
 logger = logging.getLogger("incidents")
 
 
 @login_required
 def incident_list(request):
-    incidents = (
-        Incident.objects
-        .all()
-        .select_related("reporter")
-    )
+    """
+    INSECURE VERSION (insecure branch only):
+    - Uses raw SQL with unescaped user input (q) to demonstrate SQL injection.
+    """
+    q = request.GET.get("q")
+
+    if q:
+        # Deliberately vulnerable: user input concatenated directly into SQL string
+        raw_sql = f"""
+            SELECT * FROM incidents_incident
+            WHERE title LIKE '%{q}%' OR description LIKE '%{q}%'
+            ORDER BY created_at DESC
+        """
+        incidents = Incident.objects.raw(raw_sql)
+    else:
+        incidents = (
+            Incident.objects
+            .all()
+            .select_related("reporter")
+        )
+
     context = {
         "incidents": incidents,
+        "search_term": q or "",
     }
     return render(request, "incidents/incident_list.html", context)
 
