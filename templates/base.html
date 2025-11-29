@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Secure Incident Reporting System{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-slate-900 text-white px-6 py-4 mb-8">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <div class="font-semibold">Secure Incident Reporting System</div>
+            <div class="space-x-4">
+                <a href="{% url 'incidents:list' %}" class="hover:underline">Incidents</a>
+                {% if user.is_authenticated %}
+                    <span class="text-sm">Hi, {{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="hover:underline text-sm">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="hover:underline text-sm">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
