@@ -59,7 +59,7 @@
                 {% for comment in comments %}
                     <article class="border border-slate-100 rounded-lg px-3 py-2">
                         <p class="text-sm text-slate-800 whitespace-pre-line">
-                            {{ comment.body }}
+                            {{ comment.body|safe }} <!-- This allows javscript to be entered -->
                         </p>
                         <div class="mt-2 flex items-center justify-between text-xs text-slate-500">
                             <span>
