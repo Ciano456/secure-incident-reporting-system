@@ -3,6 +3,54 @@
 {% block title %}Incidents{% endblock %}
 
 {% block content %}
-<h1 class="text-2xl font-semibold mb-4">Incidents Temporary</h1>
-<p class="text-gray-700">In Progress</p>
+<h1 class="text-2xl font-semibold mb-4">Incidents</h1>
+
+{% if incidents %}
+    <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+        <table class="min-w-full text-sm">
+            <thead class="bg-slate-50 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                <tr>
+                    <th class="px-4 py-3">ID</th>
+                    <th class="px-4 py-3">Title</th>
+                    <th class="px-4 py-3">Category</th>
+                    <th class="px-4 py-3">Severity</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3">Reporter</th>
+                    <th class="px-4 py-3">Created</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for incident in incidents %}
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-4 py-2 text-slate-600">#{{ incident.id }}</td>
+                        <td class="px-4 py-2 text-slate-900 font-medium">
+                            {{ incident.title }}
+                        </td>
+                        <td class="px-4 py-2 text-slate-600">
+                            {{ incident.get_category_display }}
+                        </td>
+                        <td class="px-4 py-2">
+                            {{ incident.get_severity_display }}
+                        </td>
+                        <td class="px-4 py-2">
+                            {{ incident.get_status_display }}
+                        </td>
+                        <td class="px-4 py-2 text-slate-600">
+                            {% if incident.is_anonymous %}
+                                <span class="italic text-slate-400">Anonymous</span>
+                            {% else %}
+                                {{ incident.reporter.username }}
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-2 text-slate-500 text-xs">
+                            {{ incident.created_at|date:"Y-m-d H:i" }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <p class="text-slate-600">No incidents recorded yet.</p>
+{% endif %}
 {% endblock %}
